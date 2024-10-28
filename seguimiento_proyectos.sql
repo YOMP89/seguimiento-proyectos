@@ -63,3 +63,29 @@ INSERT INTO HorasTrabajadas (tarea_id, empleado_id, fecha, horas) VALUES
 (1, 3, '2024-09-07', 4),  -- María trabajó 4 horas en el diseño de la interfaz
 (2, 2, '2024-09-21', 3),  -- Carlos trabajó 3 horas en la programación del sitio
 (3, 3, '2024-09-16', 5);  -- María trabajó 5 horas en el diseño de gráficos
+
+-- Listar todos los empleados
+SELECT * FROM Empleados;
+
+-- Consultar proyectos y su fecha de finalización
+SELECT nombre, fecha_fin FROM Proyectos;
+
+-- Consultar tareas asignadas a un proyecto específico
+SELECT T.nombre AS Tarea, T.descripcion, T.estado, T.fecha_entrega
+FROM Tareas T
+WHERE T.proyecto_id = 1;  -- Tareas del proyecto con ID 1
+
+-- Consultar horas trabajadas por empleado en un proyecto específico
+SELECT E.nombre AS Empleado, SUM(H.horas) AS TotalHoras
+FROM HorasTrabajadas H
+JOIN Empleados E ON H.empleado_id = E.empleado_id
+JOIN Tareas T ON H.tarea_id = T.tarea_id
+WHERE T.proyecto_id = 1  -- Horas trabajadas en el proyecto con ID 1
+GROUP BY E.nombre;
+
+-- Consultar tiempo de trabajo total por proyecto
+SELECT P.nombre AS Proyecto, SUM(H.horas) AS TotalHoras
+FROM Proyectos P
+JOIN Tareas T ON P.proyecto_id = T.proyecto_id
+JOIN HorasTrabajadas H ON T.tarea_id = H.tarea_id
+GROUP BY P.nombre;
